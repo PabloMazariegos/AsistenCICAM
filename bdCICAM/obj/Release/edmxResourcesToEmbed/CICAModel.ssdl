@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CMBX">
+    <Key>
+      <PropertyRef Name="CMBX_IDENTITY" />
+    </Key>
+    <Property Name="CMBX_IDENTITY" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DESCRIPCION" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="EMPLEADO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="APELLIDO" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PUESTO" Type="varchar" MaxLength="50" />
+    <Property Name="HUELLA" Type="varchar" MaxLength="2048" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MARK">
+    <Key>
+      <PropertyRef Name="MARK_IDENTITY" />
+    </Key>
+    <Property Name="MARK_IDENTITY" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CMBX_IDENTITY" Type="bigint" Nullable="false" />
+    <Property Name="EMPE_IDENTITY" Type="bigint" Nullable="false" />
+    <Property Name="HORA" Type="time" Precision="7" Nullable="false" />
+    <Property Name="FECHA" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="CMBX" EntityType="Self.CMBX" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EMPLEADO" EntityType="Self.EMPLEADO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MARK" EntityType="Self.MARK" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

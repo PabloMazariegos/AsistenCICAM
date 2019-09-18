@@ -1,0 +1,12 @@
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\bdCICAM.dll.config
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\bdCICAM.dll
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\bdCICAM.pdb
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\EntityFramework.dll
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\EntityFramework.xml
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\obj\Release\bdCICAM.csprojAssemblyReference.cache
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\obj\Release\bdCICAM.csproj.CoreCompileInputs.cache
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\obj\Release\bdCICAM.csproj.CopyComplete
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\obj\Release\bdCICAM.dll
+C:\Users\pablo\source\repos\AsistenCICAM\bdCICAM\obj\Release\bdCICAM.pdb

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CMBX">
+    <Key>
+      <PropertyRef Name="CMBX_IDENTITY" />
+    </Key>
+    <Property Name="CMBX_IDENTITY" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DESCRIPCION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="EMPE">
+    <Key>
+      <PropertyRef Name="EMPE_IDENTITY" />
+    </Key>
+    <Property Name="EMPE_IDENTITY" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="APELLIDO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PUESTO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="HUELLA" Type="String" MaxLength="2048" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="MARK">
+    <Key>
+      <PropertyRef Name="MARK_IDENTITY" />
+    </Key>
+    <Property Name="MARK_IDENTITY" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CMBX_IDENTITY" Type="Int64" Nullable="false" />
+    <Property Name="EMPE_IDENTITY" Type="Int64" Nullable="false" />
+    <Property Name="HORA" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CMBX" EntityType="Self.CMBX" />
+    <EntitySet Name="EMPE" EntityType="Self.EMPE" />
+    <EntitySet Name="MARK" EntityType="Self.MARK" />
+  </EntityContainer>
+</Schema>
