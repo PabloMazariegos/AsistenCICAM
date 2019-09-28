@@ -59,5 +59,20 @@ namespace apiCICAM.Controllers
 
             return Ok(new { StatusCode = 200 , message = "Empleado grabado exitosamente"});
         }
+
+
+        [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+        public IHttpActionResult Delete([FromUri] EMPLEADO emp)
+        {
+            using (CICAMEntities entities = new CICAMEntities())
+            {
+                EMPLEADO empAnt = new EMPLEADO();
+                empAnt = entities.EMPLEADO.Where(iid => iid.ID == emp.ID).FirstOrDefault();
+                entities.Entry(empAnt).State = System.Data.Entity.EntityState.Deleted;
+                entities.SaveChanges();
+            }
+
+            return Ok(new { StatusCode = 200, message = "Empleado eliminado exitosamente" });
+        }
     }
 }

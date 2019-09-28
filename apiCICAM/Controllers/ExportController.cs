@@ -19,61 +19,80 @@ namespace apiCICAM.Controllers
     public class ExportController : ApiController
     {
         string query = @"SELECT 
-	                    CAST(HORARIOS.FECHA AS varchar), 
-	                    CAST(EMPLEADO.ID AS varchar) as [CODIGO],
-	                    EMPLEADO.PUESTO,
-	                    EMPLEADO.NOMBRE, 
-	                    EMPLEADO.APELLIDO,
-	                    CAST(HORARIOS.ENTRADA AS varchar), 
-	                    CAST(HORARIOS.SALIDA AS varchar) 
-                    FROM (
-	                    SELECT ENTRADA.EMPE_IDENTITY, ENTRADA.FECHA, CONVERT(VARCHAR,ENTRADA.HORA,22)[ENTRADA], CONVERT(VARCHAR,SALIDA.HORA,22)[SALIDA] FROM (
-		                    SELECT 
-			                    MARK_IDENTITY, 
-			                    EMPE_IDENTITY, 
-			                    FECHA, 
-			                    HORA 
-		                    FROM MARK 
-		                    WHERE MARK_IDENTITY IN (
-			                    SELECT 
-				                    MIN(MARK_IDENTITY) MINIMO 
-			                    FROM MARK
-			                    GROUP BY EMPE_IDENTITY, FECHA
-		                    )
-	                    )AS ENTRADA
-	                    JOIN(
-		                    SELECT 
-			                    MARK_IDENTITY, 
-			                    EMPE_IDENTITY, 
-			                    FECHA, 
-			                    HORA 
-		                    FROM MARK 
-		                    WHERE MARK_IDENTITY IN (
-			                    SELECT 
-				                    MAX(MARK_IDENTITY) MINIMO 
-			                    FROM MARK
-			                    GROUP BY EMPE_IDENTITY, FECHA
-		                    )
-	                    )AS SALIDA
-	                    ON(
-		                    SALIDA.EMPE_IDENTITY = ENTRADA.EMPE_IDENTITY
-		                    AND SALIDA.FECHA = ENTRADA.FECHA
-	                    )
-                    )AS HORARIOS
-                    JOIN(
-	                    SELECT * FROM EMPLEADO
-                    )AS EMPLEADO
-                    ON(HORARIOS.EMPE_IDENTITY = EMPLEADO.ID)";
+	                        CAST(HORARIOS.FECHA AS varchar) AS [FECHA], 
+	                        CAST(EMPLEADO.ID AS varchar) AS [CODIGO],
+	                        EMPLEADO.PUESTO,
+	                        EMPLEADO.NOMBRE, 
+	                        EMPLEADO.APELLIDO,
+	                        CAST(HORARIOS.ENTRADA AS varchar) AS [ENTRADA],
+	                        CAST(HORARIOS.SALIDA AS varchar) AS [SALIDA],
+
+	                        CONCAT(
+			                        RIGHT(CONCAT('00',(DATEDIFF(MINUTE, HORARIOS.HENT, HORARIOS.HSAL)/60)),2), ':',
+			                        RIGHT(CONCAT('00',(DATEDIFF(MINUTE, HORARIOS.HENT, HORARIOS.HSAL)%60)),2), ':',
+			                        RIGHT(CONCAT('00',(DATEDIFF(MINUTE, HORARIOS.HENT, HORARIOS.HSAL)*60)),2))
+	                        AS [TOTAL HORAS]
+
+                        FROM (
+	                        SELECT 
+		                        ENTRADA.EMPE_IDENTITY, 
+		                        ENTRADA.FECHA, 
+		                        CONVERT(VARCHAR,ENTRADA.HORA,22)[ENTRADA],
+		                        ENTRADA.HORA AS HENT,
+		                        SALIDA.HORA AS HSAL,
+		                        CASE 
+			                        WHEN SALIDA.MARK_IDENTITY = ENTRADA.MARK_IDENTITY THEN ''
+			                        ELSE CONVERT(VARCHAR,SALIDA.HORA,22)	
+		                        END AS [SALIDA]	
+		
+	                        FROM (
+		                        SELECT 
+			                        MARK_IDENTITY, 
+			                        EMPE_IDENTITY, 
+			                        FECHA, 
+			                        HORA 
+		                        FROM MARK 
+		                        WHERE MARK_IDENTITY IN (
+			                        SELECT 
+				                        MIN(MARK_IDENTITY) MINIMO 
+			                        FROM MARK
+			                        GROUP BY EMPE_IDENTITY, FECHA
+		                        )
+	                        )AS ENTRADA
+	                        JOIN(
+		                        SELECT 
+			                        MARK_IDENTITY, 
+			                        EMPE_IDENTITY, 
+			                        FECHA, 
+			                        HORA 
+		                        FROM MARK 
+		                        WHERE MARK_IDENTITY IN (
+			                        SELECT 
+				                        MAX(MARK_IDENTITY) MINIMO 
+			                        FROM MARK
+			                        GROUP BY EMPE_IDENTITY, FECHA
+		                        )
+	                        )AS SALIDA
+	                        ON(
+		                        SALIDA.EMPE_IDENTITY = ENTRADA.EMPE_IDENTITY
+		                        AND SALIDA.FECHA = ENTRADA.FECHA
+	                        )
+                        )AS HORARIOS
+                        JOIN(
+	                        SELECT * FROM EMPLEADO
+                        )AS EMPLEADO
+                        ON(HORARIOS.EMPE_IDENTITY = EMPLEADO.ID)";
 
         // GET: api/Prueba/5
-        public List<DataExportTable> Get()
+        public List<DataExportTable> Get(String FechaInit, String FechaFinal)
         {
             var Result = new List<DataExportTable>();
             string cnxString = @"data source=DESKTOP-ISBI9FJ;initial catalog=bd-cicam;integrated security=True;";
             using (SqlConnection cnx = new SqlConnection(cnxString))
             {
                 cnx.Open();
-                using(SqlCommand cmd = new SqlCommand(query, cnx))
+                query += @"WHERE HORARIOS.FECHA BETWEEN " + FechaInit + " AND " + FechaFinal; 
+                using (SqlCommand cmd = new SqlCommand(query, cnx))
                 {
                     using(SqlDataReader rdr = cmd.ExecuteReader())
                     {
@@ -89,6 +108,7 @@ namespace apiCICAM.Controllers
                                 APELLIDO    =   (string)rdr[4],
                                 ENTRADA     =   (string)rdr[5],
                                 SALIDA      =   (string)rdr[6],
+                                TOTAL_HORAS =   (string)rdr[7]
                             });
                         }
                     }
@@ -107,6 +127,7 @@ namespace apiCICAM.Controllers
             public string APELLIDO { get; set; }
             public string ENTRADA { get; set; }
             public string SALIDA { get; set; }
+            public string TOTAL_HORAS { get; set; }
         }
 
     }
